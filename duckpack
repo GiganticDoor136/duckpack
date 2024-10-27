@@ -1,0 +1,79 @@
+# Функция для установки pacman
+install_pacman() {
+  local distro=$(get_distro)
+  case "$distro" in
+    debian|ubuntu)
+      sudo apt install pacman
+      ;;
+    fedora|centos)
+      sudo dnf install pacman
+      ;;
+    arch)
+      echo "all OK, started the install"
+      ;;
+    *)
+      echo "Не удалось определить дистрибутив. Установка pacman выполнена вручную."
+      ;;
+  esac
+  sudo pacman -Sy
+}
+
+# Проверка и установка pacman
+if ! command -v pacman &> /dev/null; then
+  install_pacman
+fi
+
+# Установка зеркал Arch Linux (можно настроить пользователем)
+export PACMAN_MIRROR="Japan, Russia, Germany"
+
+# Функции для вызова команд pacman
+pack() {
+  pacman "$@"
+}
+
+# ... остальные функции ...
+
+# Основной блок, обрабатывающий аргументы
+case "$1" in
+  pack)
+    pack -S "${@:2}"
+    ;;
+  # ... остальные случаи ...
+esac
+
+
+# Функции для вызова команд pacman
+pack() {
+  pacman "$@"
+}
+
+packdate() {
+  pacman "$@"
+}
+
+packdel() {
+  pacman "$@"
+}
+
+packsearch() {
+  pacman "$@"
+}
+
+# Основной блок, обрабатывающий аргументы
+case "$1" in
+  pack)
+    pack -S "${@:2}"
+    ;;
+  packdate)
+    packdate -Syu
+    ;;
+  packdel)
+    packdel -Rsc "${@:2}"
+    ;;
+  packsearch)
+    packsearch -Ss "${@:2}"
+    ;;
+  *)
+    echo "This command is incorrect. commands: pack - install package, packdate - update system packages, packdel - remove package, packsearch - search the packages"
+    ;;
+esac
