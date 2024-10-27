@@ -1,4 +1,3 @@
-# Функция для установки pacman
 install_pacman() {
   local distro=$(get_distro)
   case "$distro" in
@@ -12,21 +11,18 @@ install_pacman() {
       echo "all OK, started the install"
       ;;
     *)
-      echo "Не удалось определить дистрибутив. Установка pacman выполнена вручную."
+      echo "Your distributive is not supported"
       ;;
   esac
   sudo pacman -Sy
 }
 
-# Проверка и установка pacman
 if ! command -v pacman &> /dev/null; then
   install_pacman
 fi
 
-# Установка зеркал Arch Linux (можно настроить пользователем)
 export PACMAN_MIRROR="Japan, Russia, Germany"
 
-# Функции для вызова команд pacman
 pack() {
   pacman "$@"
 }
@@ -45,21 +41,24 @@ esac
 # Функции для вызова команд pacman
 pack() {
   pacman "$@"
+echo "Installation..."
 }
 
 packdate() {
   pacman "$@"
+echo "Updating..."
 }
 
 packdel() {
   pacman "$@"
+echo "Removing..."
 }
 
 packsearch() {
   pacman "$@"
+echo "Searching..."
 }
 
-# Основной блок, обрабатывающий аргументы
 case "$1" in
   pack)
     pack -S "${@:2}"
